@@ -17,6 +17,13 @@ Complete read-only X (Twitter) client using the logged-in browser session from t
 - Depends on: `~/x-refresh/config.json` (cookies + proxy), `python3`, `curl`
 - Install: `ln -s "$PWD/x-search" ~/.pi/agent/skills/x-search`
 
+### qwen-image-gen
+
+Generate images locally with Qwen-Image-2.1 (4-bit mlx-serve pack, Apple Silicon). Text-to-image, image-to-image, size/aspect/steps/seed control — served on `localhost:11234` with the OpenAI images API. Idempotent server boot for 16 GB machines (wired-limit check, `--max-resident-mem 0`, staged text encoder), a sync quick-gen script, and a detached `screen` driver with SSE step progress and OOM size-fallbacks for 1080P-class runs. Field-tested: 512x512/6 steps 43 s, 1080x1920/14 steps ~15 min on a 16 GB M1 Pro.
+
+- Depends on: `~/mlx-serve` (feat/qwen-image-2.1 build), `~/.mlx-serve/models/ddalcu/Qwen-Image-2.1-MLX-Serve-4bit` (10.7 GB pack), `sysctl iogpu.wired_limit_mb=13312` (user-run sudo), `screen`
+- Install: `ln -s "$PWD/qwen-image-gen" ~/.pi/agent/skills/qwen-image-gen`
+
 ## Install all
 
 ```bash
