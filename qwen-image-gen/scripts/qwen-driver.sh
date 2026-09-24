@@ -41,11 +41,16 @@ gen() {  # <size>
   rm -f /tmp/genfinal.json; touch "$PROMPT_FILE" || { log "no prompt file"; return 9; }
   log "=== gen $size steps=$STEPS ==="
   python3 - "$size" "$STEPS" "$PROMPT_FILE" <<'PY'
-import json, sys, time, urllib.request
+import json, os, sys, time, urllib.request
 size, steps, pfile = sys.argv[1:4]
 prompt = open(pfile).read()
 req = {"model":"ddalcu/Qwen-Image-2.1-MLX-Serve-4bit","prompt":prompt,
        "size":size,"steps":int(steps),"seed":7,"stream":True}
+neg = os.environ.get("QWEN_NEG", "").strip()
+if neg:
+    req["negative_prompt"] = neg
+    req["guidance_scale"] = float(os.environ.get("QWEN_GUID", "4"))
+    print(f"[CFG on] guidance={req['guidance_scale']} neg={neg[:60]}...")
 r = urllib.request.Request("http://127.0.0.1:11234/v1/images/generations",
         data=json.dumps(req).encode(), headers={"Content-Type":"application/json"})
 t0 = time.time()
