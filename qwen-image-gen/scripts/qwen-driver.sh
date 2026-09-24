@@ -45,7 +45,7 @@ import json, os, sys, time, urllib.request
 size, steps, pfile = sys.argv[1:4]
 prompt = open(pfile).read()
 req = {"model":"ddalcu/Qwen-Image-2.1-MLX-Serve-4bit","prompt":prompt,
-       "size":size,"steps":int(steps),"seed":7,"stream":True}
+       "size":size,"steps":int(steps),"seed":int(os.environ.get("QWEN_SEED","7")),"stream":True}
 neg = os.environ.get("QWEN_NEG", "").strip()
 if neg:
     req["negative_prompt"] = neg
