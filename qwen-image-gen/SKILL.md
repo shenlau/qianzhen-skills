@@ -76,3 +76,4 @@ tail -3 /tmp/qwen_state.txt; tail -3 /tmp/qwen/qwen_mem.log
 4. OOM 信号:server 进程消失 / 返回 503 → 降尺寸或请用户关应用后重试;10.67GB 包下限是 544×960
 5. 模型 ID 的 `Qwen` 是大写,写脚本时 `id` 判断别用小写 `qwen`
 6. 服务器 7×24 跑过:别并发多请求(16GB 会崩);一次一张
+7. **停止批量的正确顺序**(实测踩过):`screen -X quit` 后驱动/生成 python 可能幸存,且驱动的降级逻辑会自动重启服务器继续跑!必须先 `kill -9` 驱动 bash 和残留 python(`pgrep -f qwen-driver|prompt`),**最后**才杀 `mlx-serve serve`,再核对 GPU
